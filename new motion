@@ -1,0 +1,246 @@
+package application;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Timer;
+
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.stage.Stage;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
+
+
+
+public class Main extends Application
+{
+	Pane pane = new Pane();
+	Scene scene = new Scene(pane,1600,1000);
+	Rectangle rect = new Rectangle();
+	Rectangle rect2 = new Rectangle();
+	Rectangle haz = new Rectangle();
+	boolean goUp1,goDown1,goLeft1,goRight1,goUp2,goDown2,goLeft2,goRight2;
+
+	//Hazard haz1 = new Hazard();
+
+	public void start(Stage primaryStage) throws FileNotFoundException
+	{
+		Image image = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\cool_sky_backgrounds_022.jpg"));
+		Image image1 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\newship.png"));
+		Image image2 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\newship.png"));
+		Image himage = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\blockstring.png"));
+		ImageView imageView = new ImageView(image);
+		ImageView imageView1 = new ImageView(image1);
+		ImageView imageView2 = new ImageView(image2);
+
+
+		imageView.setX(0);
+		imageView.setY(0);
+		pane.getChildren().add(imageView);
+
+		rect.relocate(300,300);
+		rect.setWidth(100);rect.setHeight(100);
+		rect.setFill(Color.RED);
+		rect.setFill(new ImagePattern(image1));
+		pane.getChildren().add(rect);
+
+		rect2.relocate(1300,300);
+		rect2.setWidth(100);rect2.setHeight(100);
+		rect2.setFill(Color.RED);
+		rect2.setFill(new ImagePattern(image2));
+		pane.getChildren().add(rect2);
+
+		takeInput();
+
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		primaryStage.setTitle("DogFight");
+		haz = Hazard();
+		haz.setFill(new ImagePattern(himage));
+		pane.getChildren().add(haz);
+		/*Rectangle hazRec = haz1.createHazard();
+		pane.getChildren().add(hazRec);*/
+
+
+	}
+
+
+	public void takeInput()
+	{
+
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>()
+		{
+		    @Override
+		    public void handle(KeyEvent ke)
+		    {
+		    	if(collision()==false && hazCollision() == false)
+		    	{
+		    		switch (ke.getCode())
+			    	{
+			    		case UP: goUp1 = true; break;
+			    		case DOWN: goDown1 = true; break;
+			    		case LEFT: goLeft1 = true; break;
+			    		case RIGHT: goRight1 = true; break;
+			    		case W: goUp2 = true; break;
+			    		case S: goDown2 = true; break;
+			    		case A: goLeft2 = true; break;
+			    		case D: goRight2 = true; break;
+
+			    		//case UP: rect.relocate(rect.getLayoutX(), rect.getLayoutY()-5); break;
+			    		//case DOWN: rect.relocate(rect.getLayoutX(), rect.getLayoutY()+5); break;
+			    		//case LEFT: rect.relocate(rect.getLayoutX()-5, rect.getLayoutY()); break;
+			    		//case RIGHT: rect.relocate(rect.getLayoutX()+5, rect.getLayoutY()); break;
+			    	}
+		    	}
+
+		    	if(collision() == true && (goLeft1 || goDown1 || goRight1 || goUp1))
+		    	{
+		    		rect.relocate(300,300);
+		    	}
+
+		    	if(collision() == true && (goLeft2 || goDown2 || goRight2 || goUp2))
+		    	{
+		    		rect2.relocate(1300,300);
+		    	}
+
+		    	if(hazCollision() == true && (goLeft1 || goDown1 || goRight1 || goUp1))
+		    	{
+		    		if(rect.getY() < Hazard().getY())
+		    		{
+		    			rect.relocate(rect.getLayoutX(),rect.getLayoutY()-20);
+		    		}
+		    		if(rect.getY() > Hazard().getY())
+		    		{
+		    			rect.relocate(rect.getX(),rect.getY()+20);
+		    		}
+
+
+
+		    	}
+
+
+
+		    }
+		});
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>()
+		{
+		    @Override
+		    public void handle(KeyEvent ke)
+		    {
+
+		    		switch (ke.getCode())
+			    	{
+		    		case UP: goUp1 = false; break;
+		    		case DOWN: goDown1 = false; break;
+		    		case LEFT: goLeft1 = false; break;
+		    		case RIGHT: goRight1 = false; break;
+		    		case W: goUp2 = false; break;
+		    		case S: goDown2 = false; break;
+		    		case A: goLeft2 = false; break;
+		    		case D: goRight2 = false; break;
+			    	}
+
+		    		if(hazCollision() == true && (goLeft1 || goDown1 || goRight1 || goUp1))
+			    	{
+			    		if(rect.getLayoutY() < Hazard().getLayoutY())
+			    		{
+			    			rect.relocate(rect.getLayoutX(),rect.getLayoutY()-10);
+			    		}
+
+
+
+			    	}
+
+		    }
+		});
+
+		AnimationTimer timer = new AnimationTimer()
+		{
+			double delta = 4;
+			public void handle(long arg)
+			{
+				double currX1 = rect.getLayoutX();
+				double currY1 = rect.getLayoutY();
+				double currX2 = rect2.getLayoutX();
+				double currY2 = rect2.getLayoutY();
+				if(collision() ==false)
+				{
+					if(goUp1) currY1-=delta;
+					if(goDown1) currY1+=delta;
+					if(goLeft1) currX1-=delta;
+					if(goRight1) currX1+=delta;
+					if(goUp2) currY2-=delta;
+					if(goDown2) currY2+=delta;
+					if(goLeft2) currX2-=delta;
+					if(goRight2) currX2+=delta;
+					rect.relocate(currX1,currY1);
+					rect2.relocate(currX2,currY2);
+				}
+
+			}
+		};
+		timer.start();
+	}
+
+	//Checking for collisions
+
+	public boolean collision()
+	{
+		boolean collision = false;
+
+		if(rect.getBoundsInParent().intersects(rect2.getBoundsInParent()))
+		{
+			collision = true;
+		}
+
+
+		return collision;
+	}
+	//Creating the hazard
+	public Rectangle Hazard()
+	{
+
+		haz.setX(100);haz.setY(500);
+		haz.setWidth(600);haz.setHeight(100);
+
+
+
+		return haz;
+
+	}
+
+	public boolean hazCollision()
+	{
+		boolean hcollision = false;
+
+		if(Hazard().getBoundsInParent().intersects(rect.getBoundsInParent()))
+		{
+			hcollision = true;
+		}
+
+		return hcollision;
+	}
+
+	public static void main(String[] args)
+	{
+		launch(args);
+
+	}
+}
