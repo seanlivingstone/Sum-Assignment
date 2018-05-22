@@ -1,0 +1,213 @@
+	public void handle(KeyEvent event)
+	{
+
+		double x = 0, y = 0;
+
+
+		if(event.getCode() == KeyCode.RIGHT && collision()==false && hazCollision() == false)
+		{
+			x=5.0;
+
+			rect.setX(rect.getX()+x);
+			rect.getTransforms().add(new Rotate(20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+
+		}
+
+		if(event.getCode() == KeyCode.LEFT && collision()==false && hazCollision() == false)
+		{
+
+			rect.getTransforms().add(new Rotate(-20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+			rect.setX(rect.getX()-1);
+		}
+		if(event.getCode() == KeyCode.UP && collision()==false && hazCollision() == false)		{
+
+			y=5.0;
+			rect.setY(rect.getY()-y);
+		}
+		if(event.getCode() == KeyCode.DOWN && collision()==false && hazCollision() == false)		{
+
+			y=5.0;
+			rect.setY(rect.getY()+y);
+		}
+		if(event.getCode() == KeyCode.RIGHT && collision()==true)
+		{
+			//rect.setX(rect.getX()-15);
+			rect.setX(300);
+			rect.setY(300);
+			//rect.getTransforms().add(new Rotate(-20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+		}
+		if(event.getCode() == KeyCode.LEFT && collision()==true)
+		{
+			//rect.setX(rect.getX()+15);
+			rect.setX(300);
+			rect.setY(300);
+			//rect.getTransforms().add(new Rotate(20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+		}
+
+		if(event.getCode() == KeyCode.UP && collision()==true)		{
+
+			y=10;
+			//rect.setY(rect.getY()+y);
+			rect.setX(300);
+			rect.setY(300);
+
+		}
+		if(event.getCode() == KeyCode.DOWN && collision()==true)		{
+
+			y=10;
+			//rect.setY(rect.getY()-y);
+			rect.setX(300);
+			rect.setY(300);
+		}
+
+		if(event.getCode() == KeyCode.UP && hazCollision()==true)		{
+
+			y=20;
+			rect.setY(rect.getY()+y);
+
+
+		}
+		if(event.getCode() == KeyCode.DOWN && hazCollision()==true)		{
+
+			y=20;
+			rect.setY(rect.getY()-y);
+
+		}
+
+		if(event.getCode() == KeyCode.LEFT && hazCollision()==true)
+		{
+			//rect.setX(rect.getX()+15);
+			if(rect.getY() < Hazard().getY())
+			{
+				rect.setY(rect.getY()+35);
+			}
+			if(rect.getY() > Hazard().getY())
+			{
+				rect.setY(rect.getY()-35);
+			}
+			//rect.getTransforms().add(new Rotate(20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+		}
+		if(event.getCode() == KeyCode.RIGHT && hazCollision()==true)
+		{
+			//rect.setX(rect.getX()-15);
+			if(rect.getY() < Hazard().getY())
+			{
+				rect.setY(rect.getY()+35);
+			}
+			if(rect.getY() > Hazard().getY())
+			{
+				rect.setY(rect.getY()-35);
+			}
+			//rect.getTransforms().add(new Rotate(-20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+		}
+
+
+
+
+
+
+
+
+
+		if(event.getCode() == KeyCode.D && collision()==false)
+		{
+
+			x=5.0;
+			rect1.setX(rect1.getX()+1);
+			rect1.getTransforms().add(new Rotate(20,rect1.getX() + rect1.getWidth()/2,rect1.getY() + rect1.getHeight()/2));
+
+		}
+		if(event.getCode() == KeyCode.A && collision()==false)
+		{
+
+			rect1.getTransforms().add(new Rotate(-20,rect1.getX() + rect1.getWidth()/2,rect1.getY() + rect1.getHeight()/2));
+			rect1.setX(rect1.getX()-1);
+		}
+		if(event.getCode() == KeyCode.W && collision()==false)		{
+
+			y=5.0;
+			rect1.setY(rect1.getY()-y);
+		}
+		if(event.getCode() == KeyCode.S && collision()==false)		{
+
+			y=5.0;
+			rect1.setY(rect1.getY()+y);
+		}
+
+		if(event.getCode() == KeyCode.A && collision()==true)
+		{
+			//rect1.setX(rect1.getX()-20);
+			rect1.setY(300);
+			rect1.setX(1300);
+			//rect1.getTransforms().add(new Rotate(-20,rect1.getX() + rect1.getWidth()/2,rect1.getY() + rect1.getHeight()/2));
+		}
+		if(event.getCode() == KeyCode.D && collision()==true)
+		{
+			//rect1.setX(rect1.getX()+20);
+			rect1.setY(300);
+			rect1.setX(1300);
+			//rect1.getTransforms().add(new Rotate(20,rect1.getX() + rect1.getWidth()/2,rect1.getY() + rect1.getHeight()/2));
+		}
+
+		if(event.getCode() == KeyCode.W && collision()==true)		{
+
+			y=10;
+			rect1.setY(300);
+			rect1.setX(1300);
+			//rect1.setY(rect1.getY()+y);
+
+		}
+
+		if(event.getCode() == KeyCode.S && collision()==true)		{
+
+			y=10;
+
+			rect1.setY(300);
+			rect1.setX(1300);
+
+
+		}
+
+
+
+
+	}
+
+
+
+	public boolean collision()
+	{
+		boolean collision = false;
+
+		if(rect.getBoundsInParent().intersects(rect1.getBoundsInParent()))
+		{
+			collision = true;
+		}
+
+
+		return collision;
+	}
+
+	public Rectangle Hazard()
+	{
+
+		haz.setX(100);haz.setY(500);
+		haz.setWidth(600);haz.setHeight(100);
+
+
+
+		return haz;
+
+	}
+
+	public boolean hazCollision()
+	{
+		boolean hcollision = false;
+
+		if(Hazard().getBoundsInParent().intersects(rect.getBoundsInParent()))
+		{
+			hcollision = true;
+		}
+
+		return hcollision;
+	}
