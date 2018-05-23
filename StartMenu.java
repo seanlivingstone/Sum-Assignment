@@ -1,6 +1,8 @@
 package application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+
 import static javafx.application.Application.launch;
 
 
@@ -17,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -50,7 +53,6 @@ public class StartMenu extends Main
 		btn.setText("START GAME");
 		btn.setOnAction(event -> window.setScene(s2));
 		GridPane.setConstraints(btn, 2, 0);
-		//btn.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 		grid.add(btn,0,2);
 
 
@@ -58,9 +60,10 @@ public class StartMenu extends Main
 		grid.setStyle("-fx-background-image: url('http://www.pngall.com/wp-content/uploads/2016/07/Space-PNG-Picture.png')");
 
 		//Game Title
+		//FontWeight fg = new FontWeight();
 		Text text = new Text();
 		text.setText("Dog Fight");
-		text.setFont(Font.font("Arial", 100));
+		text.setFont(Font.font("Arial", FontWeight.BOLD, 100));
 		Color c = Color.BLUE;
 		text.setFill(c);
 		grid.add(text,0,1);
@@ -73,7 +76,12 @@ public class StartMenu extends Main
 		grid2.setVgap(250);
 		grid2.setPadding(new Insets(100,100,210,100));
 
+		Button btn2 = new Button();
+		btn2.setText("EXIT");
+		btn2.setOnAction(event -> Platform.exit());
+		GridPane.setConstraints(btn2, 2, 0);
 
+		grid2.add(btn2,0,2);
 
 
 
