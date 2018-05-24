@@ -1,0 +1,202 @@
+package application;
+
+import java.io.FileInputStream;
+
+import java.io.FileNotFoundException;
+
+import javafx.animation.AnimationTimer;
+
+import javafx.application.Application;
+
+import javafx.event.Event;
+
+import javafx.event.EventHandler;
+
+import javafx.geometry.Insets;
+
+import javafx.geometry.Rectangle2D;
+
+import javafx.stage.Stage;
+
+import javafx.scene.Group;
+
+import javafx.scene.Scene;
+
+import javafx.scene.control.Label;
+
+import javafx.scene.image.Image;
+
+import javafx.scene.image.ImageView;
+
+import javafx.scene.input.KeyCode;
+
+import javafx.scene.input.KeyEvent;
+
+import javafx.scene.input.*;
+
+import javafx.scene.layout.Background;
+
+import javafx.scene.layout.BackgroundFill;
+
+import javafx.scene.layout.BorderPane;
+
+import javafx.scene.layout.CornerRadii;
+
+import javafx.scene.layout.Pane;
+
+import javafx.scene.paint.Color;
+
+import javafx.scene.paint.ImagePattern;
+
+import javafx.scene.shape.Rectangle;
+
+import javafx.scene.text.Font;
+
+import javafx.scene.text.FontWeight;
+
+import javafx.scene.text.Text;
+
+import javafx.scene.transform.Rotate;
+
+import javafx.scene.image.Image;
+
+public class Entity {
+
+	private ImageView imageview;
+
+	private double positionX;
+
+	private double positionY;
+
+	private double velocityX;
+
+	private double velocityY;
+
+	private double width;
+
+	private double height;
+
+
+
+
+
+	public Entity(Image x)
+
+	{
+
+		imageview = new ImageView(x);
+
+		positionX = 50;
+
+		positionY = 50;
+
+		velocityX = 0 ;
+
+		velocityY = 0;
+
+		width = 100;
+
+		height = 100;
+
+	}
+
+	public ImageView getSprite()
+
+	{
+
+		return imageview;
+
+	}
+
+	public void setPosition(double x, double y)
+	{
+		positionX = x;
+		positionY = y;
+	}
+
+	public double getX()
+	{
+		return positionX;
+	}
+
+	public double getY()
+	{
+		return positionY;
+	}
+
+	public void addVelocity(int x, int y)
+
+	{
+
+		velocityX += x;
+
+		velocityY += y;
+
+	}
+
+	public void subVelocity(int x,int y)
+
+	{
+
+		velocityX -= x;
+
+		velocityY -= y;
+
+	}
+
+	public void setVelocity(int x, int y)
+	{
+		velocityX = x;
+
+		velocityY = y;
+	}
+
+	public double getYVelocity()
+	{
+		return velocityY;
+	}
+
+	public double getXVelocity()
+	{
+		return velocityX;
+	}
+
+	public void render()
+
+	{
+
+		imageview.setX(positionX);
+
+		imageview.setY(positionY);
+
+	}
+
+	public void update(double time)
+
+	{
+
+		positionX += velocityX * time;
+
+		positionY += velocityY * time;
+
+	}
+
+
+
+	public Rectangle bounds()
+
+	{
+
+		return new Rectangle(positionX,positionY,100,100);
+
+	}
+
+	/*public boolean intersects(Entity s)
+
+	{
+
+		return s.getBoundsInLocal().intersects(this.getBoundsInLocal());
+
+	}*/
+
+}
