@@ -5,11 +5,10 @@ import javafx.application.Platform;
 
 import static javafx.application.Application.launch;
 
-
-
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -32,7 +31,7 @@ import java.util.*;
 public class StartMenu extends Main
 {
 	Stage window;
-	Scene s1, s2;
+	Scene s1, s2, s3;
 
 	@Override
 	public void start(Stage stage)
@@ -42,46 +41,56 @@ public class StartMenu extends Main
 
 		//Title Menu
 		GridPane grid = new GridPane();
-		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(750);
-		grid.setVgap(250);
+		grid.setAlignment(Pos.CENTER_RIGHT);
+		grid.setHgap(800);
+		grid.setVgap(200);
+
 		grid.setPadding(new Insets(100,100,210,100));
 
 		//Placing the button on the grid
 		//Creating Button
 		Button btn = new Button();
 		btn.setText("START GAME");
-		btn.setOnAction(event -> window.setScene(s2));
-		GridPane.setConstraints(btn, 2, 0);
+		btn.setOnAction(event -> window.setScene(s3));
+		GridPane.setConstraints(btn, 2, 1);
 		grid.add(btn,0,2);
+
+		/*Button btn2 = new Button();
+		btn2.setText("HELP");
+		btn2.setOnAction(event -> window.setScene(s2));
+		GridPane.setConstraints(btn2, 2, 0);
+		grid.add(btn2,1,2);*/
 
 
 		//Setting the Background
 		grid.setStyle("-fx-background-image: url('http://www.pngall.com/wp-content/uploads/2016/07/Space-PNG-Picture.png')");
 
 		//Game Title
-		//FontWeight fg = new FontWeight();
 		Text text = new Text();
-		text.setText("Dog Fight");
-		text.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-		Color c = Color.BLUE;
+		text.setText("Dog \n   Fight");
+		text.setFont(Font.loadFont("file:resources/fonts/Olga.ttf",  100));
+		Color c = Color.CORNFLOWERBLUE;
 		text.setFill(c);
+		//Adding the title to the grid screen
 		grid.add(text,0,1);
 
 
 		//Game Scene
-		GridPane grid2 = new GridPane();
-		grid2.setAlignment(Pos.CENTER);
-		grid2.setHgap(750);
-		grid2.setVgap(250);
-		grid2.setPadding(new Insets(100,100,210,100));
+		GridPane grid3 = new GridPane();
+		grid3.setAlignment(Pos.CENTER);
+		grid3.setHgap(750);
+		grid3.setVgap(250);
+		grid3.setPadding(new Insets(100,100,210,100));
 
-		Button btn2 = new Button();
-		btn2.setText("EXIT");
-		btn2.setOnAction(event -> Platform.exit());
-		GridPane.setConstraints(btn2, 2, 0);
+		Button btn3 = new Button();
+		btn3.setText("EXIT");
+		btn3.setOnAction(event -> Platform.exit());
+		GridPane.setConstraints(btn3, 2, 0);
 
-		grid2.add(btn2,0,2);
+		grid3.add(btn3,0,2);
+
+		grid3.setStyle("-fx-background-image: url(' https://data.whicdn.com/images/310430335/original.png?t=1523271564 ')");
+
 
 
 
@@ -91,7 +100,7 @@ public class StartMenu extends Main
 
 
 		 s1 = new Scene(grid, 600, 600);
-		 s2 = new Scene(grid2, 600, 600);
+		 s3 = new Scene(grid3, 1000, 900);
 
 		 window.setScene(s1);
 		 window.show();
