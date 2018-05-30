@@ -1,0 +1,1047 @@
+package application;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.stage.Stage;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+//
+import javafx.application.Application;
+import javafx.application.Platform;
+
+import static javafx.application.Application.launch;
+
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import java.util.*;
+
+
+
+
+
+
+
+public class Main extends Application implements EventHandler<KeyEvent>
+{
+
+	//Leaderboard board = new Leaderboard();
+
+	Pane pane = new Pane();
+	Stage window;
+	Scene s1, s2;
+
+	Scene scene = new Scene(pane,1600,1000);
+
+	Rectangle rect = new Rectangle();
+	Rectangle rect1 = new Rectangle();
+	Rectangle haz = new Rectangle();
+	Rectangle haz1 = new Rectangle();
+	Rectangle haz2 = new Rectangle();
+	Rectangle bHaz = new Rectangle();
+	Rectangle bHaz1 = new Rectangle();
+	Rectangle bHaz3 = new Rectangle();
+	Rectangle boundary = new Rectangle();//top
+	Rectangle boundary1 = new Rectangle();//bottom
+	Rectangle boundary2 = new Rectangle();//left
+	Rectangle boundary3 = new Rectangle();//right
+	Integer score = 0;
+	boolean collision;
+	//StartMenu s;
+	long lastNanoTime = System.nanoTime();
+	Entity player1;
+	Entity player2;
+	Entity bullet;
+
+
+	public void start(Stage primaryStage) throws FileNotFoundException
+	{
+
+		window = primaryStage;
+		window.setTitle("Dog Fight");
+
+
+		//Title Menu
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(800);
+		grid.setVgap(200);
+
+		grid.setPadding(new Insets(50,50,100,200));
+
+		//Placing the button on the grid
+		//Creating Button
+		Button btn = new Button();
+		//btn.setPrefHeight(10);
+		btn.setText("START GAME");
+		btn.setOnAction(event -> window.setScene(scene));
+		GridPane.setConstraints(btn, 2, 1);
+		grid.add(btn,0,2);
+		grid.setStyle("-fx-background-image: url('http://www.pngall.com/wp-content/uploads/2016/07/Space-PNG-Picture.png')");
+
+		Image image = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\cool_sky_backgrounds_022.jpg"));
+		Image image1 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\ship.png"));
+		Image image2 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\ship.png"));
+		Image image3 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\enemy_bullet1.gif"));
+		Image image4 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\topborder.png"));
+		Image image5 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\sideborder.png"));
+		Image image6 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\blockstring.png"));
+		Image image7 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Downloads\\blockstringvert.png"));
+		Image image8 = new Image(new FileInputStream("C:\\Users\\ls12012241\\Pictures\\block.png"));
+		player1 = new Entity(image1);
+		 player2 = new Entity(image2);
+		 bullet = new Entity(image3);
+		ImageView imageView = new ImageView(image);
+		ImageView imageView1 = new ImageView(image1);
+		ImageView imageView2 = new ImageView(image2);
+		ImageView imageView3 = new ImageView(image3);
+
+
+		imageView.setX(0);
+
+		imageView.setY(0);
+		s1 = new Scene(grid, 1600, 1000);
+		primaryStage.setScene(s1);
+
+		primaryStage.show();
+
+		primaryStage.setTitle("DogFight");
+
+		pane.getChildren().add(imageView);//background
+
+		rect = player1.bounds();
+		rect1 = player2.bounds();
+
+		player1.bullet();
+		boundary.setX(0);boundary.setY(-20);
+		boundary.setWidth(1600);boundary.setHeight(20);
+		boundary.setFill(new ImagePattern(image4));
+		pane.getChildren().add(boundary);
+
+		boundary1.setX(0);boundary1.setY(1000);
+		boundary1.setWidth(1600);boundary1.setHeight(20);
+		boundary1.setFill(new ImagePattern(image4));
+		pane.getChildren().add(boundary1);
+
+		boundary2.setX(-20);boundary2.setY(0);
+		boundary2.setWidth(20);boundary2.setHeight(1000);
+		boundary2.setFill(new ImagePattern(image5));
+		pane.getChildren().add(boundary2);
+
+		boundary3.setX(1600);boundary3.setY(0);
+		boundary3.setWidth(20);boundary3.setHeight(1000);
+		boundary3.setFill(new ImagePattern(image5));
+		pane.getChildren().add(boundary3);
+
+		haz.setX(500);haz.setY(700);
+		haz.setWidth(500);haz.setHeight(116);
+		haz.setFill(new ImagePattern(image6));
+		pane.getChildren().add(haz);
+
+		haz1.setX(140);haz1.setY(500);
+		haz1.setWidth(100);haz1.setHeight(500);
+		haz1.setFill(new ImagePattern(image7));
+		pane.getChildren().add(haz1);
+
+		haz2.setX(1140);haz2.setY(200);
+		haz2.setWidth(100);haz2.setHeight(400);
+		haz2.setFill(new ImagePattern(image7));
+		pane.getChildren().add(haz2);
+
+
+		bHaz1.setX(200);bHaz1.setY(100);
+		bHaz1.setWidth(100);bHaz1.setHeight(100);
+		bHaz1.setFill(new ImagePattern(image8));
+		pane.getChildren().add(bHaz1);
+
+		/*bHaz2.setX(1100);bHaz2.setY(850);
+		bHaz2.setWidth(400);bHaz2.setHeight(100);
+		bHaz2.setFill(new ImagePattern(image6));
+		pane.getChildren().add(bHaz2);*/
+
+		bHaz3.setX(1400);bHaz3.setY(50);
+		bHaz3.setWidth(100);bHaz3.setHeight(100);
+		bHaz3.setFill(new ImagePattern(image8));
+		pane.getChildren().add(bHaz3);
+
+		/*bHaz.setX(300);bHaz.setY(100);
+		bHaz.setWidth(100);bHaz.setHeight(100);
+		bHaz.setFill(new ImagePattern(image8));
+		pane.getChildren().add(bHaz);*/
+		/*rect1.setX(1300);rect.setY(500);
+		rect1.setWidth(100);rect.setHeight(100);
+		rect1.setFill(new ImagePattern(image2));
+		pane.getChildren().add(rect1);*/
+
+
+
+		/*pane.getChildren().add(board.getPoints());
+
+		board.getPoints().setX(350);
+
+		board.getPoints().setY(50);*/
+
+
+
+		if(collision)
+		{
+			System.out.println("Collision");
+		}
+
+
+
+		player1.setPosition(300,300);
+		player2.setPosition(1300,300);
+		//bullet.setPosition((int)rect.getLayoutX(), (int)rect.getLayoutY());
+		pane.getChildren().add(player1.getSprite());
+		pane.getChildren().add(player2.getSprite());
+
+		ArrayList<String> input = new ArrayList<String>();
+
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>()
+
+		{
+
+			public void handle(KeyEvent e)
+
+			{
+
+				String code = e.getCode().toString();
+
+				if(!input.contains(code))
+
+					input.add(code);
+
+			}
+
+		});
+
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>()
+
+		{
+
+			public void handle(KeyEvent e)
+
+			{
+
+				String code = e.getCode().toString();
+
+				if(input.contains(code))
+
+					input.remove(code);
+			}
+
+		});
+
+		new AnimationTimer()
+
+		{
+
+			public void handle(long currentNanoTime)
+
+			{
+
+				double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+
+				double rotationCenterX1 = player1.getX() + player1.bounds().getWidth() /2;
+
+				double rotationCenterY1 = player1.getY() + player1.bounds().getHeight()/2;
+
+				double rotationCenterX2 = player2.getX() + player2.bounds().getWidth() /2;
+
+				double rotationCenterY2 = player2.getY() + player2.bounds().getHeight() /2;
+
+				lastNanoTime = currentNanoTime;
+
+
+
+
+					if(input.contains("W"))
+
+						player1.addVelocity(0,-5);
+
+					if(input.contains("S"))
+
+						player1.addVelocity(0,5);
+
+					if(input.contains("A") )
+						player1.addVelocity(-5,0);
+						//player1.getSprite().getTransforms().add(new Rotate(-1,rotationCenterX1,rotationCenterY1));
+						//System.out.println(player1.getX() + " " + player1.getY());
+						//player1.bounds().getTransforms().add(new Rotate(-1,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+					if(input.contains("D"))
+						player1.addVelocity(5,0);
+						//player1.getSprite().getTransforms().add(new Rotate(1,rotationCenterX1,rotationCenterY1));
+						//System.out.println(player1.getX() + " " + player1.getY());
+
+
+
+					//player1.bounds().getTransforms().add(new Rotate(1,player1.bounds().getX() + player1.bounds().getWidth()/2,player1.bounds().getY() + player1.bounds().getHeight()/2));
+
+				player1.update(elapsedTime);
+
+				player1.render();
+
+				if(input.contains("UP"))
+
+					player2.addVelocity(0,-5);
+
+				if(input.contains("DOWN"))
+
+					player2.addVelocity(0,5);
+
+				if(input.contains("LEFT"))
+					player2.addVelocity(-5,0);
+					//player2.getSprite().getTransforms().add(new Rotate(-1,rotationCenterX2,rotationCenterY2));
+				//rect.getTransforms().add(new Rotate(-20,rect.getX() + rect.getWidth()/2,rect.getY() + rect.getHeight()/2));
+
+				if(input.contains("RIGHT"))
+					player2.addVelocity(5,0);
+					//player2.getSprite().getTransforms().add(new Rotate(1,rotationCenterX2,rotationCenterY2));
+
+				player2.update(elapsedTime);
+
+				player2.render();
+
+				if(input.contains("SPACE"))
+				{
+					bullet.setVelocity(0, -400);
+					bullet.setPosition(player1.bounds().getX() + 32, player1.bounds().getY());
+					//bullet = player1.bullet();
+				}
+
+				bullet.update(elapsedTime);
+				bullet.render();
+
+				if(collision())
+				{
+					System.out.println("COLLISION");
+					player1.setPosition(300,300);
+					player2.setPosition(1300,300);
+					player1.setVelocity(0,0);
+					player2.setVelocity(0,0);
+				}
+
+				if(boundCollision())
+				{
+
+					System.out.println("bCollisoin");
+					player1.setVelocity(0,0);
+					player1.setPosition(player1.getX(), player1.getY()+1);
+				}
+
+				if(boundCollision2())
+				{
+
+					System.out.println("bCollisoin2");
+					player2.setVelocity(0,0);
+					player2.setPosition(player2.getX(), player2.getY()+1);
+				}
+
+				if(boundCollision3())
+				{
+
+					System.out.println("bCollisoin3");
+					player1.setVelocity(0,0);
+					player1.setPosition(player1.getX(), player1.getY()-1);
+				}
+
+				if(boundCollision4())
+				{
+
+					System.out.println("bCollisoin4");
+					player2.setVelocity(0,0);
+					player2.setPosition(player2.getX(), player2.getY()-1);
+				}
+
+				if(boundCollision5())
+				{
+
+					System.out.println("bCollisoin5");
+					player1.setVelocity(0,0);
+					player1.setPosition(player1.getX()+1, player1.getY());
+				}
+
+				if(boundCollision6())
+				{
+
+					System.out.println("bCollisoin6");
+					player2.setVelocity(0,0);
+					player2.setPosition(player2.getX()+1, player2.getY());
+				}
+
+				if(boundCollision7())
+				{
+
+					System.out.println("bCollisoin7");
+					player1.setVelocity(0,0);
+					player1.setPosition(player1.getX()-1, player1.getY());
+				}
+
+				if(boundCollision8())
+				{
+
+					System.out.println("bCollisoin8");
+					player2.setVelocity(0,0);
+					player2.setPosition(player2.getX()-1, player2.getY());
+				}
+
+				if(hazCollision() && player1.getXVelocity() > 0 && player1.getX() < haz.getX())
+				{
+					System.out.println("hCollision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(hazCollision() && player1.getXVelocity() < 0 && player1.getX() > haz.getX()+400)
+				{
+					System.out.println("hCollision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(hazCollision() && player1.getYVelocity() > 0 && player1.getY() < haz.getY())
+				{
+					System.out.println("hCollision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(hazCollision() && player1.getYVelocity() < 0 && player1.getY() > haz.getY())
+				{
+					System.out.println("hCollision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(hazCollision1() && player2.getXVelocity() > 0 && player2.getX() < haz.getX())
+				{
+					System.out.println("hCollision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(hazCollision1() && player2.getXVelocity() < 0 && player2.getX() > haz.getX()+400)
+				{
+					System.out.println("hCollision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(hazCollision1() && player2.getYVelocity() > 0 && player2.getY() < haz.getY())
+				{
+					System.out.println("hCollision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(hazCollision1() && player2.getYVelocity() < 0 && player2.getY() > haz.getY())
+				{
+					System.out.println("hCollision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+
+
+				//
+
+				if(haz1Collision() && player1.getXVelocity() > 0 && player1.getX() < haz1.getX())
+				{
+					System.out.println("hCollision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(haz1Collision() && player1.getXVelocity() < 0 && player1.getX() > haz1.getX())
+				{
+					System.out.println("hCollision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(haz1Collision() && player1.getYVelocity() > 0 && player1.getY() < haz1.getY())
+				{
+					System.out.println("hCollision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(haz1Collision() && player1.getYVelocity() < 0 && player1.getY() > haz1.getY())
+				{
+					System.out.println("hCollision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(haz1Collision1() && player2.getXVelocity() > 0 && player2.getX() < haz1.getX())
+				{
+					System.out.println("hCollision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(haz1Collision1() && player2.getXVelocity() < 0 && player2.getX() > haz1.getX())
+				{
+					System.out.println("hCollision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(haz1Collision1() && player2.getYVelocity() > 0 && player2.getY() < haz1.getY())
+				{
+					System.out.println("hCollision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(haz1Collision1() && player2.getYVelocity() < 0 && player2.getY() > haz1.getY())
+				{
+					System.out.println("hCollision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+
+				//
+
+				if(haz2Collision() && player1.getXVelocity() > 0 && player1.getX() < haz2.getX())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(haz2Collision() && player1.getXVelocity() < 0 && player1.getX() > haz2.getX())
+				{
+					System.out.println("h2Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(haz2Collision() && player1.getYVelocity() > 0 && player1.getY() < haz2.getY())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(haz2Collision() && player1.getYVelocity() < 0 && player1.getY() > haz2.getY())
+				{
+					System.out.println("h2Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(haz2Collision1() && player2.getXVelocity() > 0 && player2.getX() < haz2.getX())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(haz2Collision1() && player2.getXVelocity() < 0 && player2.getX() > haz2.getX())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(haz2Collision1() && player2.getYVelocity() > 0 && player2.getY() < haz2.getY())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(haz2Collision1() && player2.getYVelocity() < 0 && player2.getY() > haz2.getY())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+
+				//
+
+				if(haz3Collision(bHaz) && player1.getXVelocity() > 0 && player1.getX() < bHaz.getX())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz) && player1.getXVelocity() < 0 && player1.getX() > bHaz.getX())
+				{
+					System.out.println("h3Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz) && player1.getYVelocity() > 0 && player1.getY() < bHaz.getY())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(haz3Collision(bHaz) && player1.getYVelocity() < 0 && player1.getY() > bHaz.getY())
+				{
+					System.out.println("h2Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(haz3Collision1(bHaz) && player2.getXVelocity() > 0 && player2.getX() < bHaz.getX())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz) && player2.getXVelocity() < 0 && player2.getX() > bHaz.getX())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz) && player2.getYVelocity() > 0 && player2.getY() < bHaz.getY())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(haz3Collision1(bHaz) && player2.getYVelocity() < 0 && player2.getY() > bHaz.getY())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+
+				//
+
+				if(haz3Collision(bHaz1) && player1.getXVelocity() > 0 && player1.getX() < bHaz1.getX())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz1) && player1.getXVelocity() < 0 && player1.getX() > bHaz1.getX())
+				{
+					System.out.println("h3Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz1) && player1.getYVelocity() > 0 && player1.getY() < bHaz1.getY())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(haz3Collision(bHaz1) && player1.getYVelocity() < 0 && player1.getY() > bHaz1.getY())
+				{
+					System.out.println("h2Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(haz3Collision1(bHaz1) && player2.getXVelocity() > 0 && player2.getX() < bHaz1.getX())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz1) && player2.getXVelocity() < 0 && player2.getX() > bHaz1.getX())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz1) && player2.getYVelocity() > 0 && player2.getY() < bHaz1.getY())
+				{
+					System.out.println("h2Collision11111111111111111111111");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(haz3Collision1(bHaz1) && player2.getYVelocity() < 0 && player2.getY() > bHaz1.getY())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+
+				//
+
+
+
+				//
+
+				if(haz3Collision(bHaz3) && player1.getXVelocity() > 0 && player1.getX() < bHaz3.getX())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()-5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz3) && player1.getXVelocity() < 0 && player1.getX() > bHaz3.getX())
+				{
+					System.out.println("h3Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX()+5, player1.getY());
+				}
+
+				if(haz3Collision(bHaz3) && player1.getYVelocity() > 0 && player1.getY() < bHaz3.getY())
+				{
+					System.out.println("h2Collision1");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()-5);
+				}
+
+				if(haz3Collision(bHaz3) && player1.getYVelocity() < 0 && player1.getY() > bHaz3.getY())
+				{
+					System.out.println("h2Collision2");
+					player1.setVelocity(0, 0);
+					player1.setPosition(player1.getX(), player1.getY()+5);
+				}
+
+				if(haz3Collision1(bHaz3) && player2.getXVelocity() > 0 && player2.getX() < bHaz3.getX())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()-5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz3) && player2.getXVelocity() < 0 && player2.getX() > bHaz3.getX())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX()+5, player2.getY());
+				}
+
+				if(haz3Collision1(bHaz3) && player2.getYVelocity() > 0 && player2.getY() < bHaz3.getY())
+				{
+					System.out.println("h2Collision1");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()-5);
+				}
+
+				if(haz3Collision1(bHaz3) && player2.getYVelocity() < 0 && player2.getY() > bHaz3.getY())
+				{
+					System.out.println("h2Collision2");
+					player2.setVelocity(0, 0);
+					player2.setPosition(player2.getX(), player2.getY()+5);
+				}
+			}
+
+		}.start();
+
+		//pane.getChildren().add(bullet.getSprite());
+	}
+
+	public void handle(KeyEvent event)
+
+	{
+		double x = 0, y = 0;
+
+	}
+
+	public boolean collision()
+	{
+		collision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(player2.bounds().getBoundsInLocal()))
+		{
+			collision = true;
+			System.out.println("Collision");
+		}
+
+		return collision;
+
+	}
+
+	//top boundary
+	public boolean boundCollision()
+	{
+		boolean bCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(boundary.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision");
+		}
+
+		return bCollision;
+	}
+
+	public boolean boundCollision2()
+	{
+		boolean bCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(boundary.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision");
+		}
+
+		return bCollision;
+	}
+
+
+	//bottom boundary
+
+	public boolean boundCollision3()
+	{
+		boolean bCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(boundary1.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision1");
+		}
+
+		return bCollision;
+	}
+
+	public boolean boundCollision4()
+	{
+		boolean bCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(boundary1.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision1");
+		}
+
+		return bCollision;
+	}
+
+	//left boundary
+	public boolean boundCollision5()
+	{
+		boolean bCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(boundary2.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision2");
+		}
+
+		return bCollision;
+	}
+
+	public boolean boundCollision6()
+	{
+		boolean bCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(boundary2.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision2");
+		}
+
+		return bCollision;
+	}
+
+	//right boundary
+	public boolean boundCollision7()
+	{
+		boolean bCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(boundary3.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision3");
+		}
+
+		return bCollision;
+	}
+
+	public boolean boundCollision8()
+	{
+		boolean bCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(boundary3.getBoundsInLocal()))
+		{
+			bCollision = true;
+			System.out.println("bCollision3");
+		}
+
+		return bCollision;
+	}
+
+	public boolean hazCollision()
+	{
+		boolean hCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(haz.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("hCollision");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean hazCollision1()
+	{
+		boolean hCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(haz.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("hCollision1");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean haz1Collision()
+	{
+		boolean hCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(haz1.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("h111111111111111Collision");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean haz1Collision1()
+	{
+		boolean hCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(haz1.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("h111111111111111Collision1");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean haz2Collision()
+	{
+		boolean hCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(haz2.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("h2222Collision");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean haz2Collision1()
+	{
+		boolean hCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(haz2.getBoundsInLocal()))
+		{
+			hCollision = true;
+			System.out.println("h2222222Collision1");
+		}
+
+
+
+
+		return hCollision;
+	}
+
+	public boolean haz3Collision(Rectangle rect)
+	{
+		boolean dCollision = false;
+
+		if(player1.bounds().getBoundsInLocal().intersects(rect.getBoundsInLocal()))
+		{
+			dCollision = true;
+		}
+
+		return dCollision;
+	}
+
+	public boolean haz3Collision1(Rectangle rect)
+	{
+		boolean dCollision = false;
+
+		if(player2.bounds().getBoundsInLocal().intersects(rect.getBoundsInLocal()))
+		{
+			dCollision = true;
+		}
+
+		return dCollision;
+	}
+	public static void main(String[] args)
+
+	{
+
+		launch(args);
+
+	}
+
+}
+
